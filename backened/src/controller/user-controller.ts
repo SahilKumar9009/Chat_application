@@ -1,4 +1,5 @@
 import User from "../model/User-model";
+import { Request, Response } from "express";
 
 export const createUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
