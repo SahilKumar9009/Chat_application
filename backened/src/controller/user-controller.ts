@@ -1,17 +1,25 @@
-import { Request, Response } from "express";
 import User from "../model/User-model";
 
-export const staticToken =
-  "dfldflkjslakjflsjdlkfjlaksdjflkdsjlkfjsfjlksadjlkfjsa";
-
 export const createUser = async (req: Request, res: Response) => {
-  console.log(req.body);
-  const { name, email, password } = req.body;
-  const user = new User({ name, email, password });
-  await user.save();
-  res.status(201).json(user);
-};
+  const { username, email, password } = req.body;
+  try {
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }],
+    });
 
-export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+    if (existingUser) {
+      throw new Error("User already exists");
+    }
+
+    const user = new User({
+      username,
+      email,
+      passwordHash: password,
+    });
+
+    await user.save();
+    return user;
+  } catch (error) {
+    throw error;
+  }
 };
