@@ -5,6 +5,7 @@ export const staticToken =
   "dfldflkjslakjflsjdlkfjlaksdjflkdsjlkfjsfjlksadjlkfjsa";
 
 export const createUser = async (req: Request, res: Response) => {
+  console.log(req.body);
   const { name, email, password } = req.body;
   const user = new User({ name, email, password });
   await user.save();
@@ -13,14 +14,4 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    if (user.password === password) {
-      res.status(200).json({ staticToken });
-    } else {
-      res.status(401).json({ message: "Invalid Credentials" });
-    }
-  } else {
-    res.status(404).json({ message: "User not found" });
-  }
 };
