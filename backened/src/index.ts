@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import RootRouter from "./router/root_router";
 import { configDotenv } from "dotenv";
 import { connectDb } from "./db/ConnectDb";
-import { createUser } from "./controller/user-controller";
+import { createUser, loginUser } from "./controller/user-controller";
 
 const app = express();
 const server = http.createServer(app);
@@ -18,6 +18,8 @@ export const io = new Server(server, {
     origin: "*",
   },
 });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -26,6 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/", RootRouter);
 
 app.post("/api/user", createUser);
+app.post("/api/login", loginUser);
 
 server.listen(3000, () => {
   console.log("Server is running on port 3000");
