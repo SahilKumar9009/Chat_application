@@ -2,7 +2,6 @@ import User from "../model/User-model";
 import { Request, Response } from "express";
 
 export const createUser = async (req: Request, res: Response) => {
-  console.log("checking", req.body);
   const { username, email, password } = req.body;
   try {
     const existingUser = await User.findOne({
